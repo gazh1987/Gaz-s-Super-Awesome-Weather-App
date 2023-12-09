@@ -12,7 +12,6 @@ var Map = function() {
         var radius = e.accuracy;
     
         L.marker(e.latlng).addTo(map);
-        //L.circle(e.latlng, radius).addTo(map);
     }
 
     function onLocationError(e) {
