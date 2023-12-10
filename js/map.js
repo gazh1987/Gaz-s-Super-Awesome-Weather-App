@@ -1,5 +1,4 @@
 var map = null;
-var latlng = null;
 
 var Map = function() {
 
