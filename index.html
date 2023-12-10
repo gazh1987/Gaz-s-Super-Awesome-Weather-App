@@ -12,15 +12,20 @@
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
         crossorigin=""></script>
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <script src="js/config.js"></script>
     <script src="js/Map.js"></script>
+
 
 </head>
 
 <body>
     <div id = "page_header" class="row">
         <div class="col-sm-11">
-            <h4>Location</h4>
-            <p id="current_location">waiting for location...</p>
+            <h4 class="header_weather_data" id="current_location">waiting for location...</h4>
+            <p class="header_weather_data" id="weather_desc">waiting for weather...</p>
+            <p class="header_weather_data" id="temperature">waiting for weather...</p>
+            <p class="header_weather_data" id="wind_speed">waiting for weather...</p>
+            <p class="header_weather_data" id="humidity">waiting for weather...</p>
         </div>
     </div>
     <div id="map"></div>

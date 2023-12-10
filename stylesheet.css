@@ -10,7 +10,7 @@ html, body, #map {
     padding-top: 1%; 
 }
 
-#current_location {
+.header_weather_data {
     font-weight: bold;
     font-style: italic;
 }

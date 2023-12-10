@@ -1,7 +1,6 @@
 var map = null;
 
 var Map = function() {
-
     map = L.map('map', { zoomControl:false, attributionControl:false }).fitWorld(); 
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
@@ -10,29 +9,48 @@ var Map = function() {
 
     function onLocationFound(e) {
         L.marker(e.latlng).addTo(map);
-        reverseGeocode(e.latlng);
+
+        var lat = e.latlng.lat;
+        var lon = e.latlng.lng;
+
+        // Make a GET request to the OpenWeatherMap API
+        // apiKey comes from config.js file
+        const apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${owmApiKey}`;
+
+        fetch(apiUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                var locationName = `Location: ${data.name}`;
+                document.getElementById('current_location').innerText = locationName;
+                var weatherInfo = `Weather: ${data.weather[0].description}`;
+                document.getElementById('weather_desc').innerText = weatherInfo;
+                var temp = Math.floor(data.main.temp - 273.15);
+                temp = `Temperature: ${temp}`;
+                temp = temp + "c";
+                document.getElementById('temperature').innerText = temp;
+                var windSpeed = data.wind.speed;
+                windSpeed = Math.floor(windSpeed * 3.6);
+                windSpeed = `Wind Speed: ${windSpeed}`;
+                windSpeed = windSpeed + "km/h"
+                document.getElementById('wind_speed').innerText = windSpeed;
+                var humidity = `Humidity: ${data.main.humidity}`;
+                humidity = humidity + "%";
+                document.getElementById('humidity').innerText = humidity;
+            })
+            .catch(error => {
+                console.error('Error fetching data from OpenWeatherMap API:', error);
+        });
     }
 
     function onLocationError(e) {
         alert(e.message);
     }
 
-    // Function to perform reverse geocoding
-    function reverseGeocode(latlng) {
-        // Using Nominatim API for reverse geocoding
-        var url = 'https://nominatim.openstreetmap.org/reverse?format=json&lat=' + latlng.lat + '&lon=' + latlng.lng;
-
-        // Make a GET request to the Nominatim API
-        fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                // Get the place name from the response
-                var locationName = data.display_name;
-                document.getElementById('current_location').innerText = locationName;
-            })
-            .catch(error => console.error('Error:', error));
-    }
-    
     map.on('locationerror', onLocationError);
     map.on('locationfound', onLocationFound);
 }
